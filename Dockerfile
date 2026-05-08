@@ -56,6 +56,9 @@ RUN curl -o /tmp/wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/rel
 # Install rtlcss for RTL support
 RUN npm install -g rtlcss
 
+# Create odoo user (avoid running as root)
+RUN useradd -m -d /app -s /bin/bash odoo
+
 # Set working directory
 WORKDIR /app
 
@@ -68,10 +71,14 @@ RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-# Create necessary directories
+# Create necessary directories and set ownership
 RUN mkdir -p /var/log/odoo /var/lib/odoo \
+    && chown -R odoo:odoo /var/log/odoo /var/lib/odoo /app \
     && chmod +x generate_odoo_conf.sh \
     && chmod +x odoo-bin
+
+# Switch to non-root user
+USER odoo
 
 # Expose Odoo ports
 EXPOSE 8069
