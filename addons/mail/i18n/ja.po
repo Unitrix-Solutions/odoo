@@ -9,21 +9,22 @@
 # Junko Augias, 2025
 # "Junko Augias (juau)" <juau@odoo.com>, 2025, 2026.
 # Weblate <noreply-mt-weblate@weblate.org>, 2025, 2026.
+# Sanami Koshita <sanami@quartile.co>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-15 18:38+0000\n"
-"PO-Revision-Date: 2026-02-21 10:12+0000\n"
-"Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
-"Language-Team: Japanese <https://translate.odoo.com/projects/odoo-18/mail/ja/"
-">\n"
+"POT-Creation-Date: 2026-04-17 18:36+0000\n"
+"PO-Revision-Date: 2026-05-02 09:06+0000\n"
+"Last-Translator: \"Junko Augias (juau)\" <juau@odoo.com>\n"
+"Language-Team: Japanese <https://translate.odoo.com/projects/odoo-18/mail/"
+"ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.17\n"
 
 #. module: mail
 #. odoo-python
@@ -1963,7 +1964,7 @@ msgstr "返信定型文"
 #. module: mail
 #: model:res.groups,name:mail.group_mail_canned_response_admin
 msgid "Canned Response Administrator"
-msgstr "返信定型文責任管理者"
+msgstr "返信定型文管理者"
 
 #. module: mail
 #: model:ir.actions.act_window,name:mail.mail_canned_response_action
@@ -1989,8 +1990,8 @@ msgid ""
 "in your messages. Type ':' followed by the name of your shortcut "
 "(e.g. :hello) to use in your messages."
 msgstr ""
-"定型文は、メッセージの中で自動的に長い内容に置き換えられます。:'の後にショー"
-"トカット名(例:hello)を入力して下さい。"
+"返信定型文は、メッセージの中で自動的に長い内容に置き換えられます。:'の後に"
+"ショートカット名(例:hello)を入力して下さい。"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.mail_canned_response_view_tree
@@ -3927,7 +3928,7 @@ msgstr "失敗メール"
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_search
 msgid "Failed"
-msgstr "不合格"
+msgstr "失敗"
 
 #. module: mail
 #. odoo-javascript
@@ -3957,19 +3958,22 @@ msgstr "メッセージの投稿に失敗しました。クリックして再試
 #. odoo-python
 #: code:addons/mail/models/mail_render_mixin.py:0
 msgid ""
-"Failed to render QWeb template: %(template_src)s\n"
+"Failed to render QWeb template for %(template_label)s\n"
+"Target Model: %(model_name)s\n"
+"Language context: %(lang_context)s\n"
+"Error: %(error_details)s\n"
 "\n"
-"%(template_traceback)s)"
+"Template Source Snippet:\n"
+"%(template_src)s"
 msgstr ""
-"QWebテンプレートのレンダリングに失敗しました: %(template_src)s\n"
-"\n"
-"%(template_traceback)s)"
 
 #. module: mail
 #. odoo-python
 #: code:addons/mail/models/mail_render_mixin.py:0
-msgid "Failed to render inline_template template: %(template_txt)s"
-msgstr "テンプレートのレンダリングに失敗しました: %(template_txt)s"
+msgid ""
+"Failed to render inline_template template: %(template_txt)s\n"
+"Error details: %(error)s"
+msgstr ""
 
 #. module: mail
 #. odoo-python
@@ -4454,7 +4458,7 @@ msgstr "HTTPルーティング"
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__res_users__notification_type__email
 msgid "Handle by Emails"
-msgstr "メール送信"
+msgstr "メールで受け取る"
 
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__res_users__notification_type__inbox
@@ -5738,7 +5742,7 @@ msgstr "内部メモを記録する..."
 #: code:addons/mail/static/src/chatter/web/chatter.xml:0
 #: code:addons/mail/static/src/core/common/composer.js:0
 msgid "Log note"
-msgstr "メモを記録"
+msgstr "ログメモ"
 
 #. module: mail
 #. odoo-javascript
@@ -5872,6 +5876,12 @@ msgstr "メール テンプレート エディター"
 #: model:ir.model,name:mail.model_mail_template_reset
 msgid "Mail Template Reset"
 msgstr "メールテンプレートリセット"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+msgid "Mail Template: '%(name)s' (ID: %(record_id)s)"
+msgstr ""
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.model_search_view
@@ -6020,6 +6030,12 @@ msgstr "未読にする"
 #: code:addons/mail/static/src/core/web/activity_list_popover_item.xml:0
 msgid "Mark as done"
 msgstr "完了とする"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+msgid "Mass Mailing Template: '%(name)s' (ID: %(record_id)s)"
+msgstr ""
 
 #. module: mail
 #. odoo-javascript
@@ -6328,7 +6344,7 @@ msgstr "音声添付用メタデータ"
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__mail_mail__failure_type__mail_email_missing
 msgid "Missing email"
-msgstr "Eメールがありません"
+msgstr "メールアドレス未設定"
 
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__mail_notification__failure_type__mail_email_missing
@@ -6662,6 +6678,12 @@ msgstr "まだ会話はありません..."
 #: code:addons/mail/static/src/core/web/thread_patch.xml:0
 msgid "No history messages"
 msgstr "過去メッセージはありません。"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+msgid "No language detected in context"
+msgstr ""
 
 #. module: mail
 #. odoo-python
@@ -9546,6 +9568,12 @@ msgstr "Composerからテンプレートを作成するには、有効なモデ�
 #. module: mail
 #. odoo-python
 #: code:addons/mail/models/mail_render_mixin.py:0
+msgid "Template name not identified"
+msgstr ""
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
 msgid ""
 "Template rendering should only be called with a list of IDs. Received “%"
 "(res_ids)s” instead."
@@ -10403,7 +10431,7 @@ msgstr ""
 #: model:ir.model.fields,help:mail.field_res_partner__activity_exception_decoration
 #: model:ir.model.fields,help:mail.field_res_users__activity_exception_decoration
 msgid "Type of the exception activity on record."
-msgstr "記録上の例外活動の種類。"
+msgstr "レコード上の例外の活動タイプ。"
 
 #. module: mail
 #. odoo-javascript
@@ -10532,10 +10560,28 @@ msgid "Unmute Conversation"
 msgstr "会話をミュート解除"
 
 #. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/core/common/message.js:0
+msgid "Unnamed"
+msgstr "無名"
+
+#. module: mail
 #. odoo-python
 #: code:addons/mail/models/mail_tracking_value.py:0
 msgid "Unnamed %(record_model_name)s (%(record_id)s)"
 msgstr "無題%(record_model_name)s (%(record_id)s)"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+msgid "Unnamed Mail Template"
+msgstr ""
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+msgid "Unnamed Mailing"
+msgstr ""
 
 #. module: mail
 #. odoo-javascript
@@ -12136,6 +12182,21 @@ msgstr "{{ object.partner_id.lang }}"
 #: code:addons/mail/models/discuss/discuss_channel_member.py:0
 msgid "“%(member_name)s” in “%(channel_name)s”"
 msgstr "“%(member_name)s” 、 “%(channel_name)s内”"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/core/web/activity.js:0
+msgid "“%s”"
+msgstr ""
+
+#~ msgid ""
+#~ "Failed to render QWeb template: %(template_src)s\n"
+#~ "\n"
+#~ "%(template_traceback)s)"
+#~ msgstr ""
+#~ "QWebテンプレートのレンダリングに失敗しました: %(template_src)s\n"
+#~ "\n"
+#~ "%(template_traceback)s)"
 
 #~ msgid "%(user)s connected. This is their first connection. Wish them luck."
 #~ msgstr "%(user)s接続済。彼らは初めての接続です。幸運を祈りましょう。"

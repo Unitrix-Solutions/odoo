@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-29 18:37+0000\n"
-"PO-Revision-Date: 2026-01-27 23:15+0000\n"
+"PO-Revision-Date: 2026-04-25 18:01+0000\n"
 "Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Hindi <https://translate.odoo.com/projects/odoo-18/"
 "sale_project/hi/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.17\n"
 
 #. module: sale_project
 #. odoo-python
@@ -143,6 +143,11 @@ msgid ""
 "this sale line\n"
 "  - Stock Moves: the quantity comes from confirmed pickings\n"
 msgstr ""
+"प्रॉडक्ट कॉन्फ़िगरेशन के अनुसार, डिलीवर की गई मात्रा को ऑटोमैटिक तरीके से कैलकुलेट करें:\n"
+"  - मैन्युअल: मात्रा को लाइन पर मैन्युअल रूप से सेट करें\n"
+"  - एनालिटिक फ्रॉम एक्सपेंसेस: जितने खर्चे दर्ज किए गए हैं, उनकी कुल संख्या ही डिलीवरी मात्रा होगी\n"
+"  - टाइमशीट: मात्रा इस सेल लाइन से जुड़े टास्क पर दर्ज किए गए घंटों का योग है\n"
+"  - स्टॉक मूव्स: मात्रा पुष्टि की गई पिकिंग से आती है\n"
 
 #. module: sale_project
 #. odoo-python
@@ -248,7 +253,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:sale_project.field_product_product__service_tracking
 #: model:ir.model.fields,field_description:sale_project.field_product_template__service_tracking
 msgid "Create on Order"
-msgstr ""
+msgstr "ऑर्डर पर बनाएं"
 
 #. module: sale_project
 #. odoo-python
@@ -377,6 +382,11 @@ msgid ""
 "Create a task and track hours: Create a task on the sales order validation "
 "and track the work hours."
 msgstr ""
+"ऑर्डर पर मात्रा मैनुअल रूप से सेट करें: बिना एनालिटिक अकाउंट बनाए, दर्ज की गई मात्रा के "
+"आधार पर इनवॉइस बनाएं.\n"
+"कॉन्ट्रैक्ट पर टाइमशीट: संबंधित टाइमशीट पर ट्रैक किए गए घंटों के आधार पर इनवॉइस बनाएं.\n"
+"टास्क बनाएं और घंटे ट्रैक करें: सेल्स ऑर्डर की पुष्टि होने पर टास्क बनाएं और काम के घंटों को "
+"ट्रैक करें।"
 
 #. module: sale_project
 #. odoo-python
@@ -595,6 +605,11 @@ msgid ""
 "also change or remove the sales order item of each timesheet entry "
 "individually."
 msgstr ""
+"सेल्स ऑर्डर आइटम जिसमें इस टास्क पर बिताया गया समय जोड़ा जाएगा, ताकि आपके ग्राहक को इनवॉइस भेजा जा सके.\n"
+"डिफ़ॉल्ट रूप से प्रोजेक्ट पर सेट किया गया सेल्स ऑर्डर आइटम चुना जाएगा. उसकी अनुपस्थिति में, अंतिम प्रीपेड सेल्स "
+"ऑर्डर आइटम जिसमें समय बचा है, उपयोग किया जाएगा.\n"
+"इस टास्क को नॉन-बिलेबल बनाने के लिए सेल्स ऑर्डर आइटम को हटा दें. आप हर टाइमशीट एंट्री के सेल्स ऑर्डर "
+"आइटम को व्यक्तिगत रूप से बदल या हटा भी सकते हैं।"
 
 #. module: sale_project
 #. odoo-javascript
@@ -761,7 +776,7 @@ msgstr "टू डू"
 #. module: sale_project
 #: model:ir.model.fields,field_description:sale_project.field_project_task__task_to_invoice
 msgid "To invoice"
-msgstr ""
+msgstr "इनवॉइस के लिए"
 
 #. module: sale_project
 #: model:ir.model.fields,field_description:sale_project.field_product_product__service_type

@@ -404,8 +404,10 @@ class Task(models.Model):
 
     @api.onchange('project_id')
     def _onchange_project_id(self):
-        if self.state != '04_waiting_normal':
+        if self.state != '04_waiting_normal' and self.state not in CLOSED_STATES:
             self.state = '01_in_progress'
+        if not self.project_id and not self.user_ids:
+            self.user_ids = self.env.user
 
     def is_blocked_by_dependences(self):
         return any(blocking_task.state not in CLOSED_STATES for blocking_task in self.depend_on_ids)
@@ -819,7 +821,7 @@ class Task(models.Model):
                     'dependent_ids': False,
                     'parent_id': False,
                 }
-                vals['child_ids'] = [Command.create(child_id.copy_data(default)[0]) for child_id in task.child_ids]
+                vals['child_ids'] = [Command.create(child_id.copy_data(default)[0]) for child_id in task.child_ids.filtered(lambda c: c.active)]
         return vals_list
 
     def _create_task_mapping(self, copied_tasks):
@@ -1073,7 +1075,8 @@ class Task(models.Model):
     def _load_records_create(self, vals_list):
         for vals in vals_list:
             if vals.get('recurring_task'):
-                if not vals.get('recurrence_id'):
+                rec_fields = vals.keys() & self._get_recurrence_fields()
+                if not vals.get('recurrence_id') and not rec_fields:
                     default_val = self.default_get(self._get_recurrence_fields())
                     vals.update(**default_val)
             project_id = vals.get('project_id')
@@ -1327,7 +1330,7 @@ class Task(models.Model):
                         task.state = '04_waiting_normal'
                 task.date_last_stage_update = now
         elif 'project_id' in vals:
-            self.filtered(lambda t: t.state != '04_waiting_normal').state = '01_in_progress'
+            self.filtered(lambda t: t.state != '04_waiting_normal' and t.state not in CLOSED_STATES).state = '01_in_progress'
 
         self._task_message_auto_subscribe_notify({task: task.user_ids - old_user_ids[task] - self.env.user for task in self})
 

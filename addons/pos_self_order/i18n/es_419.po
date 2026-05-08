@@ -6,13 +6,14 @@
 # Wil Odoo, 2024
 # Patricia Gutiérrez Capetillo <pagc@odoo.com>, 2025
 # Fernanda Alvarez, 2025
-# "Fernanda Alvarez (mfar)" <mfar@odoo.com>, 2025.
+# "Fernanda Alvarez (mfar)" <mfar@odoo.com>, 2025, 2026.
+# Weblate <noreply-mt-weblate@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-20 18:38+0000\n"
-"PO-Revision-Date: 2025-09-30 22:21+0000\n"
+"POT-Creation-Date: 2026-04-10 18:38+0000\n"
+"PO-Revision-Date: 2026-05-02 09:04+0000\n"
 "Last-Translator: \"Fernanda Alvarez (mfar)\" <mfar@odoo.com>\n"
 "Language-Team: Spanish (Latin America) <https://translate.odoo.com/projects/"
 "odoo-18/pos_self_order/es_419/>\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
 "0) ? 1 : 2);\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.17\n"
 
 #. module: pos_self_order
 #: model:ir.actions.report,print_report_name:pos_self_order.report_self_order_qr_codes_page
@@ -530,7 +531,7 @@ msgstr "Botones de inicio"
 #. odoo-javascript
 #: code:addons/pos_self_order/static/src/app/pages/confirmation_page/confirmation_page.xml:0
 msgid "Hope you enjoyed your meal!"
-msgstr "Ojalá haya disfrutado su comida."
+msgstr "Esperamos que hayas disfrutado tus alimentos."
 
 #. module: pos_self_order
 #: model_terms:ir.ui.view,arch_db:pos_self_order.qr_codes_page
@@ -1323,6 +1324,8 @@ msgid ""
 "You are not authorized to create, update, or delete records of type '%"
 "(model)s'. Only the following models are allowed: %(allowed)s"
 msgstr ""
+"No tienes autorización para crear, actualizar ni eliminar registros de tipo "
+"\"%(model)s\". Solo los siguientes modelos están permitidos: %(allowed)s"
 
 #. module: pos_self_order
 #. odoo-python
@@ -1393,6 +1396,11 @@ msgid "Your order status has been changed"
 msgstr "El estado de su orden cambió"
 
 #. module: pos_self_order
+#: model_terms:ir.ui.view,arch_db:pos_self_order.res_config_settings_view_form_menu
+msgid "a"
+msgstr "a"
+
+#. module: pos_self_order
 #: model_terms:ir.ui.view,arch_db:pos_self_order.pos_self_order_product_pos_category_form_view
 msgid "and"
 msgstr "y"
@@ -1417,3 +1425,9 @@ msgstr "odoo"
 #: code:addons/pos_self_order/static/src/app/pages/product_page/product_page.xml:0
 msgid "options"
 msgstr "opciones"
+
+#. module: pos_self_order
+#. odoo-javascript
+#: code:addons/pos_self_order/static/src/app/pages/cart_page/cart_page.xml:0
+msgid "x"
+msgstr "x"

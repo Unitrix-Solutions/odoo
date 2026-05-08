@@ -1,5 +1,5 @@
 import { withSequence } from "@html_editor/utils/resource";
-import { describe, expect, test } from "@odoo/hoot";
+import { describe, expect, mockUserAgent, test } from "@odoo/hoot";
 import {
     click,
     getActiveElement,
@@ -11,6 +11,7 @@ import {
     press,
     queryAll,
     queryAllTexts,
+    queryFirst,
     queryOne,
     waitFor,
     waitForNone,
@@ -85,7 +86,7 @@ test("should show bold button highlighted after applying format when selection i
     await contains(".btn[name='bold']").click();
 
     expect(".btn[name='bold']").toHaveClass("active");
-    expect(getContent(el)).toBe(`<p>te<strong data-oe-zws-empty-inline="">[]\u200B</strong>st</p>`);
+    expect(getContent(el)).toBe(`<p>te<strong data-oe-zws-empty-inline="">\u200B[]</strong>st</p>`);
 });
 
 test("toolbar closes when selection leaves editor", async () => {
@@ -544,6 +545,34 @@ test("toolbar open on single selected cell in table", async () => {
     await expectElementCount(".o-we-toolbar", 1);
 });
 
+test.tags("desktop");
+test("Position toolbar correctly on table selection", async () => {
+    const contentBefore = unformat(`
+        <p>abcd</p>
+        <p>abcd</p>
+        <table class="table table-bordered o_table">
+            <tbody>
+                <tr>
+                    <td><p><br></p></td>
+                    <td><p>[<br></p></td>
+                </tr>
+                <tr>
+                    <td><p><br></p></td>
+                    <td><p>]<br></p></td>
+                </tr>
+            </tbody>
+        </table>
+    `);
+
+    await setupEditor(contentBefore);
+    await waitFor(".o-we-toolbar");
+    const firstTd = queryFirst("td.o_selected_td");
+    const toolbarOverlay = queryOne(".o-we-toolbar").parentElement;
+    const toolbarRect = toolbarOverlay.getBoundingClientRect();
+    const cellRect = firstTd.getBoundingClientRect();
+    expect([toolbarRect.left, toolbarRect.bottom]).toMatch([cellRect.left, cellRect.top]);
+});
+
 test("should select table single cell when entire content is selected via mouse movement", async () => {
     const content = unformat(`
         <table class="table table-bordered o_table" style="width: 250px;">
@@ -697,6 +726,7 @@ test("toolbar correctly show namespace button group and stop showing when namesp
 });
 
 test("toolbar does not evaluate isActive when namespace does not match", async () => {
+    const { promise: isActivePromise, resolve: resolveIsActive } = Promise.withResolvers();
     class TestPlugin extends Plugin {
         static id = "TestPlugin";
         resources = {
@@ -709,7 +739,10 @@ test("toolbar does not evaluate isActive when namespace does not match", async (
                     commandId: "test_cmd",
                     title: "Test Button",
                     icon: "fa-square",
-                    isActive: () => expect.step("image format evaluated"),
+                    isActive: () => {
+                        expect.step("image format evaluated");
+                        resolveIsActive();
+                    },
                 },
             ],
         };
@@ -728,7 +761,7 @@ test("toolbar does not evaluate isActive when namespace does not match", async (
     await waitFor(".o-we-toolbar");
     expect.verifySteps([]);
     await click("img");
-    await animationFrame();
+    await isActivePromise;
     expect.verifySteps(["image format evaluated"]);
 });
 
@@ -1154,6 +1187,29 @@ describe("toolbar open and close on user interaction", () => {
 
             // Toolbar opens some time after the last keyup
             await advanceTime(500);
+            await expectElementCount(".o-we-toolbar", 1);
+        });
+
+        test("toolbar should open on Cmd+Shift+Arrow on macOS", async () => {
+            mockUserAgent("mac");
+            const { el } = await setupEditor("<p>[]test</p>");
+            await expectElementCount(".o-we-toolbar", 0);
+
+            // Simulate Cmd+Shift+ArrowRight: keydown fires but keyup is suppressed by macOS
+            await keyDown(["Meta", "Shift", "ArrowRight"]);
+            setContent(el, "<p>[test]</p>");
+            await tick(); // selectionChange
+
+            await animationFrame();
+            // Toolbar should still be closed
+            await expectElementCount(".o-we-toolbar", 0);
+
+            // keyup is NOT fired (macOS suppresses it when Cmd is held)
+            // selectionchange fires and acts as the fallback trigger
+            manuallyDispatchProgrammaticEvent(document, "selectionchange");
+            await tick();
+
+            await waitFor(".o-we-toolbar");
             await expectElementCount(".o-we-toolbar", 1);
         });
     });

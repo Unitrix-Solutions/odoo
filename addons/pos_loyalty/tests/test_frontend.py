@@ -2661,6 +2661,13 @@ class TestUi(TestPointOfSaleHttpCommon):
             'pos_config_ids': [Command.link(self.main_pos_config.id)],
         })
 
+        self.env.ref('loyalty.gift_card_product_50').write({'active': True})
+        self.create_programs([('arbitrary_name', 'gift_card')])
+
+        self.env['res.partner'].create({'name': 'AAAAAAA'})
+        self.env.ref('loyalty.ewallet_product_50').write({'active': True})
+        self.create_programs([('arbitrary_name', 'ewallet')])
+
         self.main_pos_config.with_user(self.pos_user).open_ui()
         self.start_tour(
             "/pos/web?config_id=%d" % self.main_pos_config.id,
@@ -2940,6 +2947,7 @@ class TestUi(TestPointOfSaleHttpCommon):
         )
 
     def test_scan_loyalty_card_select_customer(self):
+        self.env['ir.config_parameter'].sudo().set_param('point_of_sale.limited_customer_count', 0)
         self.env['loyalty.program'].search([]).write({'active': False})
         self.test_partner = self.env['res.partner'].create({'name': 'A Test Partner'})
 
@@ -3276,3 +3284,30 @@ class TestUi(TestPointOfSaleHttpCommon):
             login="pos_user",
         )
         self.assertEqual(len(gift_card_program.coupon_ids), 2)
+
+    def test_ewallet_tax_included_invoice(self):
+        LoyaltyProgram = self.env['loyalty.program']
+        (LoyaltyProgram.search([])).write({'pos_ok': False})
+        self.env.ref('loyalty.ewallet_product_50').write({'active': True})
+        ewallet_program = self.create_programs([('arbitrary_name', 'ewallet')])['arbitrary_name']
+        partner_aaa = self.env['res.partner'].create({'name': 'AAAA'})
+        self.env['loyalty.card'].create({
+            'partner_id': partner_aaa.id,
+            'program_id': ewallet_program.id,
+            'points': 50,
+        })
+        tax_inc = self.env['account.tax'].create({
+            'name': 'Included',
+            'amount': 10,
+            'price_include_override': 'tax_included',
+        })
+        self.whiteboard_pen.write({
+            'lst_price': 10.0,
+            'taxes_id': [Command.set(tax_inc.ids)],
+        })
+        self.main_pos_config.open_ui()
+        self.start_tour(f"/pos/ui?config_id={self.main_pos_config.id}", 'test_ewallet_tax_included_invoice', login="pos_user")
+        invoice = self.env['pos.order'].search([('session_id', '=', self.main_pos_config.current_session_id.id)], limit=1).account_move
+        self.assertEqual(invoice.move_type, 'out_invoice')
+        self.assertEqual(invoice.line_ids[0].quantity, 1)
+        self.assertEqual(invoice.line_ids[1].quantity, 1)

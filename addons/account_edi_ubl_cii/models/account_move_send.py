@@ -154,7 +154,7 @@ class AccountMoveSend(models.AbstractModel):
             self._postprocess_invoice_ubl_xml(invoice, invoice_data)
 
         # Always silently generate a Factur-X and embed it inside the PDF for inter-portability
-        if invoice_data.get('ubl_cii_xml_options', {}).get('ubl_cii_format') == 'facturx':
+        if invoice_data.get('ubl_cii_xml_options', {}).get('ubl_cii_format') in ('facturx', 'zugferd'):
             xml_facturx = invoice_data['ubl_cii_xml_attachment_values']['raw']
         else:
             xml_facturx = self.env['account.edi.xml.cii']._export_invoice(invoice)[0]
@@ -179,11 +179,18 @@ class AccountMoveSend(models.AbstractModel):
         writer = OdooPdfFileWriter()
         writer.cloneReaderDocumentRoot(reader)
 
-        writer.addAttachment('factur-x.xml', xml_facturx, subtype='text/xml')
+        attachment_name = 'factur-x.xml'
+        if invoice.commercial_partner_id.country_code == 'DE' and invoice.commercial_partner_id.peppol_eas != '0204':
+            attachment_name = 'zugferd-invoice.xml'
+
+        writer.addAttachment(attachment_name, xml_facturx, subtype='text/xml')
 
         # PDF-A.
-        if invoice_data.get('ubl_cii_xml_options', {}).get('ubl_cii_format') == 'facturx' \
-                and not writer.is_pdfa:
+        if ((invoice_data.get('ubl_cii_xml_options', {}).get('ubl_cii_format') in ('facturx', 'zugferd')
+                or (invoice.commercial_partner_id.country_code in ('FR', 'DE') and invoice.commercial_partner_id.peppol_eas != '0204'))
+                and invoice.country_code in ('FR', 'DE')
+                and not writer.is_pdfa
+            ):
             try:
                 writer.convert_to_pdfa()
             except Exception:
@@ -210,13 +217,14 @@ class AccountMoveSend(models.AbstractModel):
 
     @api.model
     def _needs_ubl_postprocessing(self, invoice_data):
-        return 'ubl_cii_xml_options' in invoice_data and invoice_data['ubl_cii_xml_options']['ubl_cii_format'] != 'facturx'
+        return 'ubl_cii_xml_options' in invoice_data and invoice_data['ubl_cii_xml_options']['ubl_cii_format'] not in ('facturx', 'zugferd')
 
     @api.model
     def _postprocess_invoice_ubl_xml(self, invoice, invoice_data):
         # Adding the PDF to the XML
         tree = etree.fromstring(invoice_data['ubl_cii_xml_attachment_values']['raw'])
-        anchor_elements = tree.xpath("//*[local-name()='AccountingSupplierParty']")
+        project_refs = tree.xpath("//*[local-name()='ProjectReference']")
+        anchor_elements = project_refs if project_refs else tree.xpath("//*[local-name()='AccountingSupplierParty']")
         if not anchor_elements:
             return
 
@@ -251,6 +259,8 @@ class AccountMoveSend(models.AbstractModel):
         })
 
         for attachment_values in attachments_to_embed:
+            # Some XML validator need a strict embed content without ligne break and whitespace
+            embed_content = base64.b64encode(attachment_values['raw']).decode()
             to_inject = f'''
                 <cac:AdditionalDocumentReference
                     {attachment_values.get("xmlns", "")}
@@ -261,9 +271,7 @@ class AccountMoveSend(models.AbstractModel):
                     <cac:Attachment>
                         <cbc:EmbeddedDocumentBinaryObject
                             mimeCode={quoteattr(attachment_values["mimetype"])}
-                            filename={quoteattr(attachment_values['filename'])}>
-                            {base64.b64encode(attachment_values['raw']).decode()}
-                        </cbc:EmbeddedDocumentBinaryObject>
+                            filename={quoteattr(attachment_values['filename'])}>{embed_content}</cbc:EmbeddedDocumentBinaryObject>
                     </cac:Attachment>
                 </cac:AdditionalDocumentReference>
             '''

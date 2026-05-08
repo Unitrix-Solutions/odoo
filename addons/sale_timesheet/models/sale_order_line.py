@@ -161,8 +161,10 @@ class SaleOrderLine(models.Model):
         refund_account_moves = self.order_id.invoice_ids.filtered(lambda am: am.state == 'posted' and am.move_type == 'out_refund').reversed_entry_id
         timesheet_domain = [
             '|',
-            ('timesheet_invoice_id', '=', False),
-            ('timesheet_invoice_id.state', '=', 'cancel')]
+                ('timesheet_invoice_id', '=', False),
+                '&',
+                    ('timesheet_invoice_id.state', '=', 'cancel'),
+                    ('timesheet_invoice_id.payment_state', '!=', 'invoicing_legacy')]
         if refund_account_moves:
             credited_timesheet_domain = [('timesheet_invoice_id.state', '=', 'posted'), ('timesheet_invoice_id', 'in', refund_account_moves.ids)]
             timesheet_domain = expression.OR([timesheet_domain, credited_timesheet_domain])

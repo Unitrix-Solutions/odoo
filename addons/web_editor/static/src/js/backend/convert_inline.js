@@ -34,7 +34,8 @@ export const TABLE_ATTRIBUTES = {
 };
 // Cancel tables default styles.
 export const TABLE_STYLES = {
-    'border-collapse': 'collapse',
+    'border-collapse': 'separate',
+    'border-spacing': '0px',
     'text-align': 'inherit',
     'font-size': 'unset',
     'line-height': 'inherit',
@@ -381,6 +382,7 @@ function cardToTable(editable) {
                 col.append(child);
             }
             const subTable = _createTable();
+            subTable.style.height = '100%';
             const superRow = document.createElement('tr');
             const superCol = document.createElement('td');
             row.append(col);
@@ -460,7 +462,7 @@ function classToStyle($editable, cssRules) {
             }
         };
         style = correctBorderAttributes(style);
-        if (Object.keys(style || {}).length === 0) {
+        if (Object.keys(style || {}).length === 0 || node.nodeName === "T") {
             writes.push(() => { node.removeAttribute('style'); });
         } else {
             writes.push(() => {

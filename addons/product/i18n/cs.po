@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-29 18:37+0000\n"
-"PO-Revision-Date: 2026-02-21 10:12+0000\n"
+"POT-Creation-Date: 2026-04-10 18:38+0000\n"
+"PO-Revision-Date: 2026-03-30 15:08+0000\n"
 "Last-Translator: \"Marta (wacm)\" <wacm@odoo.com>\n"
 "Language-Team: Czech <https://translate.odoo.com/projects/odoo-18/product/cs/"
 ">\n"
@@ -27,9 +27,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : "
-"(n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
-"X-Generator: Weblate 5.14.3\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
+"<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #. module: product
 #. odoo-python
@@ -56,16 +56,6 @@ msgid "# Products"
 msgstr "Počet produktů"
 
 #. module: product
-#: model_terms:ir.ui.view,arch_db:product.report_pricelist_page
-msgid "$14.00"
-msgstr "$14.00"
-
-#. module: product
-#: model_terms:ir.ui.view,arch_db:product.report_pricelist_page
-msgid "$15.00"
-msgstr "$15.00"
-
-#. module: product
 #. odoo-python
 #: code:addons/product/models/product_pricelist_item.py:0
 msgid ""
@@ -85,8 +75,8 @@ msgid ""
 "%(item_name)s: end date (%(end_date)s) should be after start date (%"
 "(start_date)s)"
 msgstr ""
-"%(item_name)s: datum ukončení (%(end_date)s) by mělo být po datu zahájení "
-"(%(start_date)s)"
+"%(item_name)s: datum ukončení (%(end_date)s) by mělo být po datu zahájení (%"
+"(start_date)s)"
 
 #. module: product
 #. odoo-python
@@ -179,22 +169,12 @@ msgstr "1 rok"
 #. module: product
 #: model:product.attribute.value,name:product.pav_warranty
 msgid "1 year warranty extension"
-msgstr ""
-
-#. module: product
-#: model_terms:ir.ui.view,arch_db:product.report_packagingbarcode
-msgid "10"
-msgstr "10"
+msgstr "Prodloužení záruky o 1 rok"
 
 #. module: product
 #: model_terms:ir.ui.view,arch_db:product.report_pricelist_page
 msgid "10 Units"
 msgstr "10 jednotek"
-
-#. module: product
-#: model_terms:ir.ui.view,arch_db:product.report_packagingbarcode
-msgid "123456789012"
-msgstr "123456789012"
 
 #. module: product
 #: model:product.template,description_sale:product.product_product_4_product_template
@@ -300,6 +280,8 @@ msgid ""
 "<span>%</span>\n"
 "                                <span>on</span>"
 msgstr ""
+"<span>%</span>\n"
+"                                <span>na</span>"
 
 #. module: product
 #: model_terms:ir.ui.view,arch_db:product.product_variant_easy_edit_view
@@ -318,6 +300,8 @@ msgid ""
 "<strong>Save</strong> this page and come back\n"
 "                                here to set up the feature."
 msgstr ""
+"<strong>Uložte</strong> tuto stránku a vraťte se sem,\n"
+"                                    abyste tuto funkci nastavili."
 
 #. module: product
 #: model_terms:ir.ui.view,arch_db:product.product_template_only_form_view
@@ -864,7 +848,7 @@ msgstr "Vyberte rozvržení stránky pro tisk štítků"
 #. module: product
 #: model:product.attribute.value,name:product.pav_cleaning_kit
 msgid "Cleaning kit"
-msgstr ""
+msgstr "Čistící sada"
 
 #. module: product
 #: model_terms:ir.ui.view,arch_db:product.product_variant_easy_edit_view
@@ -1349,7 +1333,7 @@ msgstr "Zobrazení použito na"
 #: model:ir.model.fields,field_description:product.field_product_template_attribute_value__display_name
 #: model:ir.model.fields,field_description:product.field_update_product_attribute_value__display_name
 msgid "Display Name"
-msgstr "Zobrazovací název"
+msgstr "Zobrazovaný název"
 
 #. module: product
 #: model:ir.model.fields,field_description:product.field_product_attribute__display_type
@@ -1501,7 +1485,7 @@ msgstr "Další informace"
 #. module: product
 #: model:product.attribute,name:product.pa_extra_options
 msgid "Extra Options"
-msgstr ""
+msgstr "Další možnosti"
 
 #. module: product
 #: model:ir.model.fields,field_description:product.field_product_combo_item__extra_price
@@ -1956,6 +1940,11 @@ msgid "Kilograms"
 msgstr "Kilogramy"
 
 #. module: product
+#: model:product.attribute.value,name:product.size_attribute_l
+msgid "L"
+msgstr ""
+
+#. module: product
 #: model:product.template,name:product.product_product_6_product_template
 msgid "Large Cabinet"
 msgstr "Velká skříňka"
@@ -2070,6 +2059,11 @@ msgid ""
 msgstr ""
 "Hledáte bambusové mořidlo na míru, které by ladilo se stávajícím nábytkem? "
 "Kontaktujte nás pro cenovou nabídku."
+
+#. module: product
+#: model:product.attribute.value,name:product.size_attribute_m
+msgid "M"
+msgstr ""
 
 #. module: product
 #: model:ir.model.fields,help:product.field_product_template_attribute_value__exclude_for
@@ -2735,7 +2729,7 @@ msgstr "Počet produktů"
 #. module: product
 #: model:res.groups,name:product.group_product_manager
 msgid "Product Creation"
-msgstr ""
+msgstr "Vytváření produktu"
 
 #. module: product
 #: model:ir.model,name:product.model_product_document
@@ -2892,7 +2886,7 @@ msgstr "Popisek produktu"
 #: model_terms:ir.ui.view,arch_db:product.product_template_search_view
 #: model_terms:ir.ui.view,arch_db:product.product_view_search_catalog
 msgid "Product Type"
-msgstr "Typ výrobku"
+msgstr "Typ produktu"
 
 #. module: product
 #: model:ir.model,name:product.model_uom_uom
@@ -2987,7 +2981,7 @@ msgstr "Vlastnosti"
 #. module: product
 #: model:product.attribute.value,name:product.pav_protection_kit
 msgid "Protection kit"
-msgstr ""
+msgstr "Ochranná sada"
 
 #. module: product
 #: model:ir.model.fields,field_description:product.field_product_product__purchase_ok
@@ -3141,6 +3135,11 @@ msgstr "Ŕádky"
 #: model:ir.model.fields,field_description:product.field_product_pricelist_item__rule_tip
 msgid "Rule Tip"
 msgstr "Pravidlo zpropitného"
+
+#. module: product
+#: model:product.attribute.value,name:product.size_attribute_s
+msgid "S"
+msgstr ""
 
 #. module: product
 #: model:ir.model.fields,field_description:product.field_product_product__sale_ok
@@ -3686,7 +3685,7 @@ msgstr "Název měrné jednotky"
 #. odoo-javascript
 #: code:addons/product/static/src/product_catalog/order_line/order_line.xml:0
 msgid "Unit price:"
-msgstr ""
+msgstr "Jednotková cena:"
 
 #. module: product
 #: model_terms:ir.ui.view,arch_db:product.report_packagingbarcode
@@ -3815,8 +3814,8 @@ msgid ""
 "        Used to compute margins on sale orders."
 msgstr ""
 "Hodnota produktu (automaticky vypočítaná v AVCO).\n"
-"Používá se k ocenění produktu, když není známa pořizovací cena "
-"(např. při úpravě skladů).\n"
+"Používá se k ocenění produktu, když není známa pořizovací cena (např. při "
+"úpravě skladů).\n"
 "Používá se k výpočtu marží u prodejních objednávek."
 
 #. module: product
@@ -4235,8 +4234,8 @@ msgid ""
 "products:\n"
 "%(products)s\n"
 msgstr ""
-"Hodnotu %(value)s nelze smazat, protože se používá u následujících produktů:"
-"\n"
+"Hodnotu %(value)s nelze smazat, protože se používá u následujících "
+"produktů:\n"
 "%(products)s\n"
 
 #. module: product
@@ -4458,3 +4457,15 @@ msgstr "k"
 #: code:addons/product/static/src/js/pricelist_report/product_pricelist_report.xml:0
 msgid "xlsx"
 msgstr "xlsx"
+
+#~ msgid "$14.00"
+#~ msgstr "$14.00"
+
+#~ msgid "$15.00"
+#~ msgstr "$15.00"
+
+#~ msgid "10"
+#~ msgstr "10"
+
+#~ msgid "123456789012"
+#~ msgstr "123456789012"
