@@ -8,8 +8,8 @@ cat > "$GENERATED_CONF" <<EOF
 db_host = ${ODOO_DB_HOST:-db}
 db_port = ${ODOO_DB_PORT:-5432}
 db_user = ${ODOO_DB_USER:-odoo}
-db_password = ${ODOO_DB_PASSWORD:-odoo_password}
-db_name = ${ODOO_DB_NAME:-odoo}
+db_password = ${ODOO_DB_PASSWORD:-odoo}
+db_name = ${ODOO_DB_NAME:-}
 admin_passwd = ${ODOO_ADMIN_PASS:-admin123}
 http_port = 8069
 longpolling_port = 8072
