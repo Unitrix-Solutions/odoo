@@ -1401,6 +1401,112 @@ class StockQuant(TransactionCase):
         delivery.action_assign()
         self.assertEqual(delivery.move_ids.quantity, 24)
 
+    def test_reservation_preserved_after_relocation(self):
+        """Test stock relocation preserves the original reservation order
+        between deliveries."""
+        customer_location = self.env.ref('stock.stock_location_customers')
+        self.env['stock.quant']._update_available_quantity(self.product, self.stock_location, 8.0)
+        first_delivery = self.env['stock.picking'].create({
+            'picking_type_id': self.ref('stock.picking_type_out'),
+            'location_id': self.stock_location.id,
+            'location_dest_id': customer_location.id,
+            'move_ids': [Command.create({
+                'name': 'Delivery',
+                'product_id': self.product.id,
+                'product_uom_qty': 5.0,
+                'location_id': self.stock_location.id,
+                'location_dest_id': customer_location.id,
+            })],
+        })
+        second_delivery = first_delivery.copy()
+        (first_delivery | second_delivery).action_confirm()
+
+        self.assertRecordValues(first_delivery.move_line_ids, [{
+            'quantity': 5.0,
+            'location_id': self.stock_location.id,
+            'product_id': self.product.id,
+        }])
+        self.assertRecordValues(second_delivery.move_line_ids, [{
+            'quantity': 3.0,
+            'location_id': self.stock_location.id,
+            'product_id': self.product.id,
+        }])
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', self.product.id),
+            ('location_id', '=', self.stock_location.id),
+        ])
+        relocate_wizard = Form.from_action(self.env, quant.action_stock_quant_relocate())
+        relocate_wizard.dest_location_id = self.stock_subloc3
+        relocate_wizard.save().action_relocate_quants()
+
+        self.assertRecordValues(first_delivery.move_line_ids, [{
+            'quantity': 5.0,
+            'location_id': self.stock_subloc3.id,
+            'product_id': self.product.id,
+        }])
+        self.assertRecordValues(second_delivery.move_line_ids, [{
+            'quantity': 3.0,
+            'location_id': self.stock_subloc3.id,
+            'product_id': self.product.id,
+        }])
+
+    def test_action_done_quants_cache_scope(self):
+        """ The quants cache built by '_action_done' holds the lots, packages
+        and owners of the validated move lines and nothing else. The strict
+        gathers of the loop match those exactly, so the other quants of the
+        product at the same locations are never read from the cache.
+        """
+        customer_location = self.env.ref('stock.stock_location_customers')
+        owner = self.env['res.partner'].create({'name': 'Owner'})
+        packages = self.env['stock.quant.package'].create([{'name': 'PACK-%s' % i} for i in range(3)])
+        for package in packages:
+            self.env['stock.quant']._update_available_quantity(self.product, customer_location, 1.0, package_id=package)
+        self.env['stock.quant']._update_available_quantity(self.product, customer_location, 1.0, owner_id=owner)
+        self.env['stock.quant']._update_available_quantity(self.product, customer_location, 1.0)
+        self.env['stock.quant']._update_available_quantity(self.product, self.stock_location, 3.0)
+
+        move = self.env['stock.move'].create({
+            'name': 'OUT 1 product in PACK-0',
+            'product_id': self.product.id,
+            'product_uom_qty': 1,
+            'product_uom': self.product.uom_id.id,
+            'location_id': self.stock_location.id,
+            'location_dest_id': customer_location.id,
+        })
+        move._action_confirm()
+        move._action_assign()
+        move.move_line_ids.write({'result_package_id': packages[0].id, 'quantity': 1})
+        move.picked = True
+
+        Quant = self.env.registry['stock.quant']
+        original = Quant._get_quants_by_products_locations
+        caches = []
+
+        def spy(quants, *args, **kwargs):
+            cache = original(quants, *args, **kwargs)
+            # '_action_assign' builds an empty cache for moves without origin
+            if cache:
+                caches.append(cache)
+            return cache
+
+        self.patch(Quant, '_get_quants_by_products_locations', spy)
+        move._action_done()
+
+        self.assertEqual(len(caches), 1)
+        self.assertEqual({key[3] for key in caches[0]}, {False, packages[0].id})
+        self.assertEqual({key[4] for key in caches[0]}, {False})
+        customer_quants = self.env['stock.quant'].search([
+            ('product_id', '=', self.product.id),
+            ('location_id', '=', customer_location.id),
+        ]).sorted('id')
+        self.assertRecordValues(customer_quants, [
+            {'package_id': packages[0].id, 'owner_id': False, 'quantity': 2.0},
+            {'package_id': packages[1].id, 'owner_id': False, 'quantity': 1.0},
+            {'package_id': packages[2].id, 'owner_id': False, 'quantity': 1.0},
+            {'package_id': False, 'owner_id': owner.id, 'quantity': 1.0},
+            {'package_id': False, 'owner_id': False, 'quantity': 1.0},
+        ])
+
 
 class StockQuantRemovalStrategy(TransactionCase):
     def setUp(self):

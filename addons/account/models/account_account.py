@@ -20,7 +20,7 @@ class AccountAccount(models.Model):
     _name = "account.account"
     _inherit = ['mail.thread']
     _description = "Account"
-    _order = "code, placeholder_code"
+    _order = "code, placeholder_code, id"
     _check_company_auto = True
     _check_company_domain = models.check_companies_domain_parent_of
 
@@ -753,9 +753,9 @@ class AccountAccount(models.Model):
         ]
         if journal_id:
             domain += ['|', ('account_id.allowed_journal_ids', '=', journal_id), ('account_id.allowed_journal_ids', '=', False)]
-        if move_type in self.env['account.move'].get_inbound_types(include_receipts=True):
+        if move_type in self.env['account.move'].get_sale_types(include_receipts=True):
             domain.append(('account_id.internal_group', '=', 'income'))
-        elif move_type in self.env['account.move'].get_outbound_types(include_receipts=True):
+        elif move_type in self.env['account.move'].get_purchase_types(include_receipts=True):
             domain.append(('account_id.internal_group', '=', 'expense'))
 
         query = self.env['account.move.line']._where_calc(domain)

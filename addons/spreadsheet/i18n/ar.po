@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-24 17:39+0000\n"
-"PO-Revision-Date: 2026-04-25 18:00+0000\n"
+"PO-Revision-Date: 2026-09-09 15:10+0000\n"
 "Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Arabic <https://translate.odoo.com/projects/odoo-18/"
 "spreadsheet/ar/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 5.17\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -1952,7 +1952,7 @@ msgstr "مقارنة قيمتين عدديتين ببعضهما، تكون ال�
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.xml:0
 msgid "Compute from totals"
-msgstr ""
+msgstr "الحساب من المجاميع الإجمالية"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -2195,7 +2195,7 @@ msgstr "التعداد "
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 #: code:addons/spreadsheet/static/src/pivot/pivot_helpers.js:0
 msgid "Count Distinct"
-msgstr ""
+msgstr "عدد القيم الفريدة"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -3600,6 +3600,8 @@ msgstr "لم تعثر الوظيفة [[FUNCTION_NAME]] على أي نتائج. "
 msgid ""
 "Function [[FUNCTION_NAME]] expects number values for %s, but got a boolean."
 msgstr ""
+"تتوقع الدالة [[FUNCTION_NAME]] قيمًا رقمية لـ %s ، ولكنها حصلت على قيمة "
+"منطقية."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -3607,6 +3609,7 @@ msgstr ""
 msgid ""
 "Function [[FUNCTION_NAME]] expects number values for %s, but got a string."
 msgstr ""
+"تتوقع الدالة [[FUNCTION_NAME]] قيمًا رقمية لـ %s ، ولكنها حصلت على سلسلة."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -3615,6 +3618,7 @@ msgid ""
 "Function [[FUNCTION_NAME]] expects number values for %s, but got an empty "
 "value."
 msgstr ""
+"تتوقع الدالة [[FUNCTION_NAME]] قيمًا رقمية لـ %s ، ولكنها حصلت على قيمة فارغة."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -6624,7 +6628,7 @@ msgstr "السرعة "
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Spill range is not empty"
-msgstr ""
+msgstr "نطاق التمدد ليس فارغاً"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -7858,6 +7862,8 @@ msgid ""
 "The first and second arguments of [[FUNCTION_NAME]] must be non-empty "
 "matrices."
 msgstr ""
+"المعاملان الأول والثاني للدالة [[FUNCTION_NAME]] يجب أن يمثلا مصفوفتين غير "
+"فارغتين."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -8141,7 +8147,7 @@ msgstr "يجب أن تكون future_value (%s) موجبة فقط. "
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "The header row of a table can't be moved."
-msgstr ""
+msgstr "لا يمكن نقل صف الرأس في الجدول."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -8261,7 +8267,7 @@ msgstr "القيمة المرغوب بها في المستقبل للاستثم�
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "The issue (%s) must be positive or null."
-msgstr ""
+msgstr "المعامل issue (%s) يجب أن يكون أكبر من أو يساوي الصفر أو فارغاً."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -10896,7 +10902,7 @@ msgstr "تغير القيمة من القيمة الأساسية "
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Value for parameter %s is missing in [[FUNCTION_NAME]]."
-msgstr ""
+msgstr "القيمة الخاصة بالمعيار %s مفقودة في [[FUNCTION_NAME]]."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -11262,6 +11268,10 @@ msgid ""
 "default behavior is to treat         consecutive delimiters as one (if "
 "TRUE). If FALSE, empty cells values are added between consecutive delimiters."
 msgstr ""
+"ما إذا كان يجب إزالة رسالة الرسالة النصية الفارغة من نتائج التقسيم. التصرف "
+"الافتراضي هو التعامل مع \n"
+"         المحددات المتتابعة كواحدة (إذا كانت القيمة صحيحة). إذا كانت القيمة "
+"خاطئة، تتم إضافة قيم الخلايا الفارغة بين المحددات المتتابعة."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -11497,6 +11507,8 @@ msgid ""
 "[[FUNCTION_NAME]] expects the provided values of %(argName)s to be a non-"
 "empty matrix."
 msgstr ""
+"تتوقع [[FUNCTION_NAME]] أن تكون القيم المقدمة لـ %(argName)s مصفوفة غير "
+"فارغة."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -11738,7 +11750,7 @@ msgstr "غدًا"
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/public_readonly_app/public_readonly.xml:0
 msgid "x"
-msgstr ""
+msgstr "x"
 
 #. module: spreadsheet
 #. odoo-javascript

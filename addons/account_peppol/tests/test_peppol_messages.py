@@ -116,6 +116,7 @@ class TestPeppolMessageCommon(TestAccountMoveSendCommon):
                             {
                                 "href": f"http://iap-services.odoo.com/iso6523-actorid-upis%3A%3A{url_quoted_peppol_identifier}/services/busdox-docid-qns%3A%3Aurn%3Aoasis%3Anames%3Aspecification%3Aubl%3Aschema%3Axsd%3AInvoice-2%3A%3AInvoice%23%23urn%3Acen.eu%3Aen16931%3A2017%23compliant%23urn%3Afdc%3Apeppol.eu%3A2017%3Apoacc%3Abilling%3A3.0%3A%3A2.1",
                                 "document_id": "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0::2.1",
+                                "formats": ["urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0"],
                             },
                         ],
                     },
@@ -137,10 +138,12 @@ class TestPeppolMessageCommon(TestAccountMoveSendCommon):
                             {
                                 "href": f"http://iap-services.odoo.com/iso6523-actorid-upis%3A%3A{url_quoted_peppol_identifier}/services/busdox-docid-qns%3A%3Aurn%3Aoasis%3Anames%3Aspecification%3Aubl%3Aschema%3Axsd%3AInvoice-2%3A%3AInvoice%23%23urn%3Acen.eu%3Aen16931%3A2017%23compliant%23urn%3Afdc%3Apeppol.eu%3A2017%3Apoacc%3Abilling%3A3.0%3A%3A2.1",
                                 "document_id": "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0::2.1",
+                                "formats": ["urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0"],
                             },
                             {
                                 "href": f"http://iap-services.odoo.com/iso6523-actorid-upis%3A%3A{url_quoted_peppol_identifier}/services/busdox-docid-qns%3A%3Aurn%3Aoasis%3Anames%3Aspecification%3Aubl%3Aschema%3Axsd%3AInvoice-2%3A%3AInvoice%23%23urn%3Acen.eu%3Aen16931%3A2017%23compliant%23urn%3Afdc%3Apeppol.eu%3A2017%3Apoacc%3Aselfbilling%3A3.0%3A%3A2.1",
                                 "document_id": "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:selfbilling:3.0::2.1",
+                                "formats": ["urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:selfbilling:3.0"],
                             },
                         ],
                     },
@@ -283,15 +286,15 @@ class TestPeppolMessage(TestPeppolMessageCommon):
         self.assertTrue(wizard.sending_method_checkboxes['peppol']['readonly'])  # peppol is not possible to select
         self.assertFalse(wizard.alerts)  # there is no alerts
 
-    @patch('odoo.addons.account_peppol.models.res_partner.ResPartner._check_document_type_support', return_value=False)
-    def test_send_peppol_alerts_not_valid_format_partner(self, mocked_check):
+    def test_send_peppol_alerts_not_valid_format_partner(self):
+        ''' Tries to send using the NLCIUS format but the partner only accepts BIS3 '''
+        self.valid_partner.invoice_edi_format = 'nlcius'
         move = self.create_move(self.valid_partner)
         move.action_post()
-        wizard = self.create_send_and_print(move, sending_methods=['peppol'])  # partner can't receive BIS3 so Peppol not checked by default, force it
-
-        self.assertEqual(wizard.invoice_edi_format, 'ubl_bis3')
-        self.assertEqual(self.valid_partner.peppol_verification_state, 'not_valid_format')  # on peppol but can't receive bis3
+        wizard = self.create_send_and_print(move, sending_methods=['peppol'])  # Peppol not checked by default, force it
+        self.assertEqual(wizard.invoice_edi_format, 'nlcius')
         self.assertTrue('account_peppol_warning_partner' in wizard.alerts)
+        self.assertEqual(self.valid_partner.peppol_verification_state, 'not_valid_format')  # on peppol but can't receive NLCIUS
 
     def test_send_peppol_alerts_invalid_partner(self):
         """If there's already account_edi_ubl_cii_configure_partner, the warning should not appear."""
@@ -547,7 +550,7 @@ class TestPeppolMessage(TestPeppolMessageCommon):
         """When in multi/async mode, the generation of XML can fail silently (without raising).
         This needs to be reflected as an error and put the move in Peppol Error state.
         """
-        def mocked_export_invoice_constraints(self, invoice, vals):
+        def mocked_export_document_node_constraints(self, vals):
             return {'test_error_key': 'test_error_description'}
 
         self.valid_partner.invoice_edi_format = 'ubl_bis3'
@@ -557,8 +560,8 @@ class TestPeppolMessage(TestPeppolMessageCommon):
 
         wizard = self.create_send_and_print(move_1 + move_2)
         with patch(
-            'odoo.addons.account_edi_ubl_cii.models.account_edi_xml_ubl_20.AccountEdiXmlUBL20._export_invoice_constraints',
-            mocked_export_invoice_constraints
+            'odoo.addons.account_edi_ubl_cii.models.account_edi_ubl.AccountEdiUBL._export_document_node_constraints',
+            mocked_export_document_node_constraints
         ):
             wizard.action_send_and_print()
             self.env.ref('account.ir_cron_account_move_send').method_direct_trigger()

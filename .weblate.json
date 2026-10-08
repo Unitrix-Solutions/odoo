@@ -2247,6 +2247,18 @@
                 "language_regex": "^(fr)$"
             },
             {
+                "name": "l10n_fr_pdp",
+                "filemask": "addons/l10n_fr_pdp/i18n/*.po",
+                "new_base": "addons/l10n_fr_pdp/i18n/l10n_fr_pdp.pot",
+                "language_regex": "^(fr)$"
+            },
+            {
+                "name": "l10n_fr_pdp_pos",
+                "filemask": "addons/l10n_fr_pdp_pos/i18n/*.po",
+                "new_base": "addons/l10n_fr_pdp_pos/i18n/l10n_fr_pdp_pos.pot",
+                "language_regex": "^(fr)$"
+            },
+            {
                 "name": "l10n_fr_pos_cert",
                 "filemask": "addons/l10n_fr_pos_cert/i18n/*.po",
                 "new_base": "addons/l10n_fr_pos_cert/i18n/l10n_fr_pos_cert.pot",
@@ -2280,6 +2292,12 @@
                 "name": "l10n_gr_edi",
                 "filemask": "addons/l10n_gr_edi/i18n/*.po",
                 "new_base": "addons/l10n_gr_edi/i18n/l10n_gr_edi.pot",
+                "language_regex": "^(el)$"
+            },
+            {
+                "name": "l10n_gr_edi_e_invoo",
+                "filemask": "addons/l10n_gr_edi_e_invoo/i18n/*.po",
+                "new_base": "addons/l10n_gr_edi_e_invoo/i18n/l10n_gr_edi_e_invoo.pot",
                 "language_regex": "^(el)$"
             },
             {
@@ -2334,6 +2352,12 @@
                 "name": "l10n_hu_edi",
                 "filemask": "addons/l10n_hu_edi/i18n/*.po",
                 "new_base": "addons/l10n_hu_edi/i18n/l10n_hu_edi.pot",
+                "language_regex": "^(hu)$"
+            },
+            {
+                "name": "l10n_hu_edi_receive",
+                "filemask": "addons/l10n_hu_edi_receive/i18n/*.po",
+                "new_base": "addons/l10n_hu_edi_receive/i18n/l10n_hu_edi_receive.pot",
                 "language_regex": "^(hu)$"
             },
             {
@@ -2772,6 +2796,12 @@
                 "name": "l10n_pl",
                 "filemask": "addons/l10n_pl/i18n/*.po",
                 "new_base": "addons/l10n_pl/i18n/l10n_pl.pot",
+                "language_regex": "^(pl)$"
+            },
+            {
+                "name": "l10n_pl_bank_verification",
+                "filemask": "addons/l10n_pl_bank_verification/i18n/*.po",
+                "new_base": "addons/l10n_pl_bank_verification/i18n/l10n_pl_bank_verification.pot",
                 "language_regex": "^(pl)$"
             },
             {

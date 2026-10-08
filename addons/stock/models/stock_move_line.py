@@ -650,7 +650,7 @@ class StockMoveLine(models.Model):
         for (product, company), mls in ml_ids_to_check.items():
             mls = self.env['stock.move.line'].browse(mls)
             lots = self.env['stock.lot'].search([
-                '|', ('company_id', '=', False), ('company_id', '=', ml.company_id.id),
+                '|', ('company_id', '=', False), ('company_id', '=', company.id),
                 ('product_id', '=', product.id),
                 ('name', 'in', mls.mapped('lot_name')),
             ])
@@ -684,9 +684,18 @@ class StockMoveLine(models.Model):
 
         # Now, we can actually move the quant.
         ml_ids_to_ignore = OrderedSet()
+
+        # The loop below gathers in strict mode, matching the lot, package and
+        # owner of each move line exactly: only those quants can ever be read
+        # from the cache, so restrict it to them.
+        packages = mls_todo.package_id | mls_todo.result_package_id
         quants_cache = self.env['stock.quant']._get_quants_by_products_locations(
             mls_todo.product_id, mls_todo.location_id | mls_todo.location_dest_id,
-            extra_domain=['|', ('lot_id', 'in', mls_todo.lot_id.ids), ('lot_id', '=', False)])
+            extra_domain=[
+                '|', ('lot_id', 'in', mls_todo.lot_id.ids), ('lot_id', '=', False),
+                '|', ('package_id', 'in', packages.ids), ('package_id', '=', False),
+                '|', ('owner_id', 'in', mls_todo.owner_id.ids), ('owner_id', '=', False),
+            ])
 
         for ml in mls_todo.with_context(quants_cache=quants_cache):
             # if this move line is force assigned, unreserve elsewhere if needed
@@ -846,19 +855,25 @@ class StockMoveLine(models.Model):
                 'move_orig_ids': [Command.clear()]
             })
         move_line_to_unlink.unlink()
-        move_to_reassign._action_assign()
+        move_to_reassign[::-1]._action_assign()
+
+    def _get_aggregated_description(self, move):
+        return move.description_picking or ""
+
+    def _get_aggregated_line_key(self, move, product, uom, description):
+        return f'{product.id}_{product.display_name}_{description or ""}_{uom.id}_{move.product_packaging_id or ""}'
 
     def _get_aggregated_properties(self, move_line=False, move=False):
         move = move or move_line.move_id
         uom = move.product_uom or move_line.product_uom_id
         name = move.product_id.display_name
-        description = move.description_picking or ""
+        description = self._get_aggregated_description(move)
         product = move.product_id
         if description.startswith(name):
             description = description.removeprefix(name).strip()
         elif description.startswith(product.name):
             description = description.removeprefix(product.name).strip()
-        line_key = f'{product.id}_{product.display_name}_{description or ""}_{uom.id}_{move.product_packaging_id or ""}'
+        line_key = self._get_aggregated_line_key(move, product, uom, description)
         return {
             'line_key': line_key,
             'name': name,
@@ -1032,7 +1047,7 @@ class StockMoveLine(models.Model):
                 'location_dest_id': self.location_id.id,
                 'company_id': self.company_id.id or self.env.company.id,
                 'lot_id': self.lot_id.id,
-                'package_id': self.package_id.id,
+                'package_id': self.result_package_id.id,
                 'result_package_id': self.package_id.id,
                 'owner_id': self.owner_id.id,
             })]

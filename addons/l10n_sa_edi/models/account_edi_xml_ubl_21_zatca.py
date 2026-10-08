@@ -3,6 +3,7 @@ from hashlib import sha256
 from base64 import b64encode
 from lxml import etree
 from odoo import models, fields
+from odoo.tools.float_utils import float_is_zero
 from odoo.tools.misc import file_path
 import re
 
@@ -232,7 +233,14 @@ class AccountEdiXmlUBL21Zatca(models.AbstractModel):
                 filter_tax_values_to_apply=lambda l, t: not self.env['account.tax'].browse(t.get('id')).l10n_sa_is_retention
             )
             base_amount = abs(sum(tax_vals['tax_details_per_record'][l]['base_amount_currency'] for l in downpayment_lines))
-            tax_amount = abs(sum(tax_vals['tax_details_per_record'][l]['tax_amount_currency'] for l in downpayment_lines))
+            # Sum raw values before rounding to avoid cumulative rounding errors from individual line rounding
+            tax_amount = abs(sum(
+                values['raw_tax_amount_currency']
+                for downpayment_line in downpayment_lines
+                for values in tax_vals['tax_details_per_record'][downpayment_line]
+                ['tax_details'].values()
+            ))
+            tax_amount = invoice.currency_id.round(tax_amount)
             return {
                 'total_amount': base_amount + tax_amount,
                 'base_amount': base_amount,
@@ -422,7 +430,7 @@ class AccountEdiXmlUBL21Zatca(models.AbstractModel):
 
         line_vals = super()._get_invoice_line_vals(line, line_id, taxes_vals)
         total_amount_sa = abs(taxes_vals['tax_amount_currency'] + taxes_vals['base_amount_currency'])
-        extension_amount = abs(line_vals['line_extension_amount'])
+        extension_amount = abs(taxes_vals['base_amount_currency'])
         if not line.move_id._is_downpayment() and line._get_downpayment_lines():
             total_amount_sa = extension_amount = 0
             line_vals['price_vals']['price_amount'] = 0
@@ -451,7 +459,11 @@ class AccountEdiXmlUBL21Zatca(models.AbstractModel):
             'tax_subtotal_vals': [{
                 'currency': invoice.currency_id,
                 'currency_dp': invoice.currency_id.decimal_places,
-                'taxable_amount': vals['base_amount_currency'] if vals['tax_amount'] == 0 else abs(vals['base_amount_currency']),
+                'taxable_amount': (
+                    vals['base_amount_currency']
+                    if float_is_zero(vals['tax_amount'], precision_digits=2) and not self.env.context.get('is_downpayment')
+                    else abs(vals['base_amount_currency'])
+                ),
                 'tax_amount': abs(vals['tax_amount_currency']),
                 'percent': vals['_tax_category_vals_']['percent'],
                 'tax_category_vals': vals['_tax_category_vals_'],

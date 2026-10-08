@@ -56,6 +56,8 @@ class AccountEdiXmlUBL21JO(models.AbstractModel):
     @approximate
     def _get_line_unit_price_jod(self, base_line):
         line = base_line['record']
+        if not line.quantity:
+            return 0
         return self._get_line_amount_before_discount_jod(base_line) / line.quantity
 
     @approximate
@@ -431,9 +433,9 @@ class AccountEdiXmlUBL21JO(models.AbstractModel):
             'document_type_code_attrs': {'name': self._get_payment_method_code(invoice)},
             'document_type_code': "381" if is_refund else "388",
             'accounting_customer_party_vals': {
-                'party_vals': self._get_empty_party_vals() if is_refund else self._get_partner_party_vals(customer, role='customer'),
+                'party_vals': self._get_partner_party_vals(customer, role='customer'),
                 'accounting_contact': {
-                    'telephone': '' if is_refund else self._sanitize_phone(invoice.partner_id.phone or invoice.partner_id.mobile),
+                    'telephone': self._sanitize_phone(invoice.partner_id.phone or invoice.partner_id.mobile),
                 },
             },
             'seller_supplier_party_vals': {

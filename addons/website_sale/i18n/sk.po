@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-10 18:37+0000\n"
-"PO-Revision-Date: 2026-04-24 07:52+0000\n"
+"PO-Revision-Date: 2026-09-20 17:33+0000\n"
 "Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Slovak <https://translate.odoo.com/projects/odoo-18/"
 "website_sale/sk/>\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && "
 "n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
-"X-Generator: Weblate 5.17\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.products
@@ -720,7 +720,7 @@ msgstr "Tlačidlo Pridať do košíka"
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_res_config_settings__module_website_sale_autocomplete
 msgid "Address Autocomplete"
-msgstr ""
+msgstr "Automatické dopĺňanie adries"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.product_template_form_view
@@ -747,7 +747,7 @@ msgstr "Všetci používatelia"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.view_delivery_carrier_form_website_delivery
 msgid "All websites"
-msgstr ""
+msgstr "Všetky webové stránky"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.res_config_settings_view_form
@@ -1532,6 +1532,8 @@ msgid ""
 "Created in 2021, the company is young and dynamic. Discover the composition "
 "of the team and their skills."
 msgstr ""
+"Spoločnosť bola založená v roku 2021, je mladá a dynamická. Zistite, z koho "
+"sa skladá tím a aké má zručnosti."
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_image__create_date
@@ -1808,7 +1810,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:website_sale.s_mega_menu_images_subtitles
 #: model_terms:ir.ui.view,arch_db:website_sale.s_mega_menu_little_icons
 msgid "Discover our team"
-msgstr ""
+msgstr "Spoznajte náš tím"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_image__display_name
@@ -2339,7 +2341,7 @@ msgstr "Obrázok 512"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
 msgid "Image Menu"
-msgstr ""
+msgstr "Ponuka obrázkov"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.view_product_image_form
@@ -2369,7 +2371,7 @@ msgstr ""
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
 msgid "Images Subtitles"
-msgstr ""
+msgstr "Obrázky a titulky"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
@@ -2479,7 +2481,7 @@ msgstr ""
 #. module: website_sale
 #: model:product.public.category,name:website_sale.public_category_lamps
 msgid "Lamps"
-msgstr ""
+msgstr "Lampy"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
@@ -2608,7 +2610,7 @@ msgstr "Zobrazenie zoznamu"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
 msgid "Little Icons"
-msgstr ""
+msgstr "Malé ikony"
 
 #. module: website_sale
 #. odoo-javascript
@@ -2624,7 +2626,7 @@ msgstr ""
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
 msgid "Logos"
-msgstr ""
+msgstr "Loga"
 
 #. module: website_sale
 #: model:product.public.category,name:website_sale.public_category_boxes_luxury
@@ -2685,7 +2687,7 @@ msgstr "Médium"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.s_mega_menu_menu_image_menu
 msgid "Mega menu default image"
-msgstr ""
+msgstr "Predvolený obrázok mega menu"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_template__message_has_error
@@ -2736,7 +2738,7 @@ msgstr "Prejsť na predchádzajúcu"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
 msgid "Multi Menus"
-msgstr ""
+msgstr "Viacnásobné menu"
 
 #. module: website_sale
 #: model:product.public.category,name:website_sale.public_category_multimedia
@@ -2884,7 +2886,7 @@ msgstr "Žiadne"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.product_pages_kanban_view
 msgid "Not Published"
-msgstr ""
+msgstr "Nezverejnené"
 
 #. module: website_sale
 #. odoo-javascript
@@ -2936,7 +2938,7 @@ msgstr ""
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
 msgid "Odoo Menu"
-msgstr ""
+msgstr "Menu Odoo"
 
 #. module: website_sale
 #: model:product.public.category,name:website_sale.public_category_desks_office
@@ -3147,7 +3149,7 @@ msgstr "Guľôčky"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.product_share_buttons
 msgid "Pinterest"
-msgstr ""
+msgstr "Pinterest"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.view_product_image_form
@@ -3615,7 +3617,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
 #: model_terms:ir.ui.view,arch_db:website_sale.snippets_options_web_editor
 msgid "Re-order"
-msgstr ""
+msgstr "Zmena poradia"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_res_config_settings__website_sale_enabled_portal_reorder_button
@@ -3670,7 +3672,7 @@ msgstr "Odstrániť"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
 msgid "Remove all"
-msgstr ""
+msgstr "Odstrániť všetko"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.cart_lines
@@ -3707,7 +3709,7 @@ msgstr ""
 #: model:ir.model.fields,help:website_sale.field_product_tag__website_id
 #: model:ir.model.fields,help:website_sale.field_product_template__website_id
 msgid "Restrict to a specific website."
-msgstr ""
+msgstr "Obmedziť sa na konkrétnu webovú stránku."
 
 #. module: website_sale
 #. odoo-python
@@ -4068,7 +4070,7 @@ msgstr "Malé"
 #. module: website_sale
 #: model:product.public.category,name:website_sale.public_category_furnitures_sofas
 msgid "Sofas"
-msgstr ""
+msgstr "Pohovky"
 
 #. module: website_sale
 #: model:product.ribbon,name:website_sale.sold_out_ribbon
@@ -4102,7 +4104,7 @@ msgstr ""
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.s_mega_menu_menus_logos
 msgid "Spring collection has arrived!"
-msgstr ""
+msgstr "Jarná kolekcia je tu!"
 
 #. module: website_sale
 #: model:product.public.category,name:website_sale.public_category_boxes_stackable
@@ -4315,7 +4317,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:website_sale.s_mega_menu_images_subtitles
 #: model_terms:ir.ui.view,arch_db:website_sale.s_mega_menu_little_icons
 msgid "The team"
-msgstr ""
+msgstr "Tím"
 
 #. module: website_sale
 #: model_terms:ir.actions.act_window,help:website_sale.action_view_abandoned_tree
@@ -4738,7 +4740,7 @@ msgstr "Obchod webstránky"
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_website_snippet_filter
 msgid "Website Snippet Filter"
-msgstr ""
+msgstr "Filter snippetov webstránky"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_delivery_carrier__website_url
@@ -4805,7 +4807,7 @@ msgstr ""
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.product_share_buttons
 msgid "WhatsApp"
-msgstr ""
+msgstr "WhatsApp"
 
 #. module: website_sale
 #: model:ir.model.fields,help:website_sale.field_product_tag__visible_on_ecommerce
@@ -4842,7 +4844,7 @@ msgstr ""
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.product_share_buttons
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #. module: website_sale
 #. odoo-javascript
@@ -4957,7 +4959,7 @@ msgstr "PSČ"
 #. module: website_sale
 #: model:ir.ui.menu,name:website_sale.menu_delivery_zip_prefix
 msgid "Zip Prefix"
-msgstr ""
+msgstr "Predpona PSČ"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.res_config_settings_view_form

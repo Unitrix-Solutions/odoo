@@ -56,6 +56,7 @@ import { closestScrollableY } from "@web/core/utils/scrolling";
  * @property {(node: Node, newNode: Node) => Cursors} remapNode
  * @property {(newOffset: number) => Cursors} setAnchorOffset
  * @property {(newOffset: number) => Cursors} setFocusOffset
+ * @property {(callback: (cursor: Cursor) => void) => Cursors} setCursor
  * @property {(node: Node, newOffset: number) => Cursors} setOffset
  * @property {(node: Node, shiftOffset: number) => Cursors} shiftOffset
  * @property {{ node: Node, offset: number }} anchor
@@ -192,6 +193,8 @@ export class SelectionPlugin extends Plugin {
         // "collapseIfZWS",
         "isSelectionInEditable",
         "isNodeEditable",
+        "getCachedSelection",
+        "setCachedSelection",
     ];
     resources = {
         user_commands: { id: "selectAll", run: this.selectAll.bind(this) },
@@ -248,6 +251,14 @@ export class SelectionPlugin extends Plugin {
             this.editable.focus = this.editableOriginalFocus;
         }
         super.destroy();
+    }
+
+    getCachedSelection() {
+        return this._cachedSelection;
+    }
+
+    setCachedSelection(value) {
+        this._cachedSelection = value;
     }
 
     selectAll() {
@@ -313,6 +324,12 @@ export class SelectionPlugin extends Plugin {
      * Update the active selection to the current selection in the editor.
      */
     updateActiveSelection() {
+        if (this.getCachedSelection()) {
+            // `before_input_handler` may change the selection, which would
+            // invalidate the cached selection. Keep it in sync as long as
+            // the cache is active.
+            this.setCachedSelection(this.document.getSelection());
+        }
         this.previousActiveSelection = this.activeSelection;
         const selectionData = this.getSelectionData();
         if (selectionData.documentSelectionIsInEditable) {
@@ -494,7 +511,7 @@ export class SelectionPlugin extends Plugin {
      * @return { SelectionData }
      */
     getSelectionData() {
-        const selection = this.document.getSelection();
+        const selection = this.getCachedSelection() || this.document.getSelection();
         const documentSelectionIsInEditable = selection && this.isSelectionInEditable(selection);
         const documentSelection =
             selection?.anchorNode && selection?.focusNode
@@ -730,6 +747,15 @@ export class SelectionPlugin extends Plugin {
                     }
                 });
             },
+            setCursor: (callback) => {
+                this.preservedCursors.forEach((ref) => {
+                    const liveCursor = ref.deref();
+                    if (liveCursor) {
+                        callback(liveCursor);
+                    }
+                });
+                return cursor;
+            },
         };
         this.preservedCursors = this.preservedCursors.filter((c) => c.deref()); // filter out dead cursors.
         this.preservedCursors.push(new WeakRef(cursor));
@@ -843,7 +869,9 @@ export class SelectionPlugin extends Plugin {
         if (selection.isCollapsed && selection.anchorNode.nodeType !== Node.TEXT_NODE) {
             targetedNodes = [root];
         }
-        targetedNodes.push(...descendants(root));
+        for (const node of descendants(root)) {
+            targetedNodes.push(node);
+        }
         if (!targetedNodes.length) {
             targetedNodes = [root];
         }

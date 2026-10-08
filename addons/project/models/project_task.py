@@ -226,7 +226,7 @@ class Task(models.Model):
     # In the domain of displayed_image_id, we couln't use attachment_ids because a one2many is represented as a list of commands so we used res_model & res_id
     displayed_image_id = fields.Many2one('ir.attachment', domain="[('res_model', '=', 'project.task'), ('res_id', '=', id), ('mimetype', 'ilike', 'image')]", string='Cover Image')
 
-    parent_id = fields.Many2one('project.task', string='Parent Task', index=True, domain="['!', ('id', 'child_of', id)]", tracking=True)
+    parent_id = fields.Many2one('project.task', string='Parent Task', index=True, domain="['!', ('id', 'child_of', id), ('project_id', '!=', False)]", tracking=True)
     child_ids = fields.One2many('project.task', 'parent_id', string="Sub-tasks", domain="[('recurring_task', '=', False)]", export_string_translation=False)
     subtask_count = fields.Integer("Sub-task Count", compute='_compute_subtask_count', export_string_translation=False)
     closed_subtask_count = fields.Integer("Closed Sub-tasks Count", compute='_compute_subtask_count', export_string_translation=False)
@@ -409,6 +409,13 @@ class Task(models.Model):
         if not self.project_id and not self.user_ids:
             self.user_ids = self.env.user
 
+        if not self.project_id and self.parent_id and self.parent_id.project_id:
+            self.project_id = self.parent_id.project_id.id
+            self.display_in_project = False
+
+        if not self._origin and not self.parent_id and self.project_id.partner_id:
+            self.partner_id = self.project_id.partner_id
+
     def is_blocked_by_dependences(self):
         return any(blocking_task.state not in CLOSED_STATES for blocking_task in self.depend_on_ids)
 
@@ -477,7 +484,8 @@ class Task(models.Model):
             for project_follower in project_followers:
                 project_subtypes = project_follower.subtype_ids
                 task_subtypes = (project_subtypes.mapped('parent_id') | project_subtypes.filtered(lambda sub: sub.internal or sub.default)).ids if project_subtypes else None
-                partner_ids.remove(project_follower.partner_id.id)
+                if project_follower.partner_id.id in partner_ids:
+                    partner_ids.remove(project_follower.partner_id.id)
                 super().message_subscribe(project_follower.partner_id.ids, task_subtypes)
         return super().message_subscribe(partner_ids, subtype_ids)
 
@@ -1218,6 +1226,8 @@ class Task(models.Model):
                 if valid_milestone_tasks:
                     valid_milestone_tasks.write({'milestone_id': vals['milestone_id']})
                 del vals['milestone_id']
+                # the sub-tasks have already been handled by the writes above
+                valid_milestone_tasks = self.env['project.task']
 
             # 2. Parent's milestone is set to subtask with no milestone recursively
             subtasks_to_update = valid_milestone_tasks.child_ids.filtered(
@@ -1538,6 +1548,11 @@ class Task(models.Model):
                     model_description=task_model_description,
                     mail_auto_delete=False,
                 )
+
+    def _message_auto_subscribe(self, updated_values, followers_existing_policy='skip'):
+        if updated_values.get('project_id'):
+            followers_existing_policy = 'update'
+        return super()._message_auto_subscribe(updated_values, followers_existing_policy)
 
     def _message_auto_subscribe_followers(self, updated_values, default_subtype_ids):
         if 'user_ids' not in updated_values:
